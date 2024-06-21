@@ -4,6 +4,7 @@ package com.tcs.operations.entity;
 import com.tcs.operations.enums.Gender;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Generated;
 
 @Data
 @Entity
@@ -11,6 +12,7 @@ import lombok.Data;
 public class Person {
 
     @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long person_id;
 
     private String person_name;

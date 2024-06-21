@@ -10,14 +10,15 @@ import lombok.EqualsAndHashCode;
 @Data
 public class Client extends Person {
 
-    @Id
+//    @Id
+//    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long client_id;
 
     private String password;
 
     private Boolean status;
 
-    private Long person_id;
+//    private Long person_id;
 
 //    @OneToOne
 //    private Person person;

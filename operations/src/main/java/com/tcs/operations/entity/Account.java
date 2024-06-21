@@ -12,6 +12,7 @@ import java.util.List;
 public class Account {
 
     @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long account_id;
 
     private String account_number;

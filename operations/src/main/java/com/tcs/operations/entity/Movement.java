@@ -1,9 +1,7 @@
 package com.tcs.operations.entity;
 
 import com.tcs.operations.enums.Transaction;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
@@ -14,6 +12,7 @@ import java.sql.Date;
 public class Movement {
 
     @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long movement_id;
 
     private Date movement_date;
