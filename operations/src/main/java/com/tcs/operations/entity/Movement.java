@@ -25,7 +25,7 @@ public class Movement {
 
     private Long account_id;
 
-    @ManyToOne
-    private Account account;
+//    @ManyToOne
+//    private Account account;
 
 }

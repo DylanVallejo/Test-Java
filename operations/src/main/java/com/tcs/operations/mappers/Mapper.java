@@ -1,8 +1,10 @@
 package com.tcs.operations.mappers;
 
+import com.tcs.operations.dto.AccountDto;
 import com.tcs.operations.dto.ClientDto;
 import com.tcs.operations.dto.PersonDto;
 import com.tcs.operations.dto.RegisterDto;
+import com.tcs.operations.entity.Account;
 import com.tcs.operations.entity.Client;
 import com.tcs.operations.entity.Person;
 import org.springframework.beans.BeanUtils;
@@ -17,19 +19,6 @@ import java.util.stream.Stream;
 @Component
 public class Mapper {
 
-
-//    public Person registerDtoToPerson(RegisterDto registerDto){
-//        Person person = new Person();
-//        BeanUtils.copyProperties(registerDto, person);
-//        return person;
-//    }
-
-//    public PersonDto personToPersonDto(Person person){
-//        PersonDto personDto = new PersonDto();
-//        BeanUtils.copyProperties(person,personDto);
-//        return personDto;
-//    }
-
     public Client registerDtoToClient(RegisterDto registerDto){
         Client client = new Client();
         BeanUtils.copyProperties(registerDto,client);
@@ -42,16 +31,29 @@ public class Mapper {
         return personDto;
     }
 
-//    public Client clientDtoToClient(ClientDto clientDto){
-//        Client client = new Client();
-//        BeanUtils.copyProperties(clientDto, client);
-//        return client;
-//    }
-
-
     public Client updateProperties(ClientDto clientDto, Client actualProperties){
         BeanUtils.copyProperties(clientDto, actualProperties, getNullPropertyNames(clientDto));
         return actualProperties;
+    }
+
+
+    public Account accountDtoToAccount(AccountDto accountDto, Long clientId){
+        Account account = new Account();
+        BeanUtils.copyProperties(accountDto, account);
+        account.setClient_id(clientId);
+        return account;
+    }
+
+    public AccountDto accountToAccountDto(Account account){
+        AccountDto accountDto = new AccountDto();
+        BeanUtils.copyProperties(account, accountDto);
+        return accountDto;
+
+    }
+
+    public Account updateAccountBalance(Account actualAccount, AccountDto accountDto){
+        BeanUtils.copyProperties(accountDto,actualAccount, getNullPropertyNames(accountDto));
+        return actualAccount;
     }
 
     private String[] getNullPropertyNames(Object source) {

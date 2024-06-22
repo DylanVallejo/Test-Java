@@ -4,7 +4,6 @@ package com.tcs.operations.entity;
 import com.tcs.operations.enums.Gender;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Generated;
 
 @Data
 @Entity

@@ -24,13 +24,15 @@ public class Account {
 
     private Boolean account_status;
 
+//    private Long person_id;
+
     private Long client_id;
 
-    @ManyToOne
-    private Client client;
-
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private List<Movement> movements;
+//    @ManyToOne
+//    private Client client;
+//
+//    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+//    private List<Movement> movements;
 
 
 }
