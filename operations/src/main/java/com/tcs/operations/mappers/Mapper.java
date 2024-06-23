@@ -1,18 +1,16 @@
 package com.tcs.operations.mappers;
 
-import com.tcs.operations.dto.AccountDto;
-import com.tcs.operations.dto.ClientDto;
-import com.tcs.operations.dto.PersonDto;
-import com.tcs.operations.dto.RegisterDto;
+import com.tcs.operations.dto.*;
 import com.tcs.operations.entity.Account;
 import com.tcs.operations.entity.Client;
-import com.tcs.operations.entity.Person;
+import com.tcs.operations.entity.Movement;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Component;
 
 import java.beans.FeatureDescriptor;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 
@@ -55,6 +53,23 @@ public class Mapper {
         BeanUtils.copyProperties(accountDto,actualAccount, getNullPropertyNames(accountDto));
         return actualAccount;
     }
+
+
+    public Movement movementDtoToMovement(MovementDto movementDto, Double balance, Long accountId){
+        Movement movement = new Movement();
+        BeanUtils.copyProperties(movementDto, movement, getNullPropertyNames(movementDto));
+        movement.setMovement_date(LocalDateTime.now());
+        movement.setBalance(balance);
+        movement.setAccount_id(accountId);
+        return movement;
+    }
+
+    public MovementDto movementToMovementDto(Movement movement){
+        MovementDto movementDto = new MovementDto();
+        BeanUtils.copyProperties(movement, movementDto);
+        return movementDto;
+    }
+
 
     private String[] getNullPropertyNames(Object source) {
         final BeanWrapper wrappedSource = new BeanWrapperImpl(source);

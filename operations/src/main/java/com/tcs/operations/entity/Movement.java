@@ -4,7 +4,7 @@ import com.tcs.operations.enums.Transaction;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -15,17 +15,15 @@ public class Movement {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long movement_id;
 
-    private Date movement_date;
+    private LocalDateTime movement_date;
 
+    @Enumerated(EnumType.STRING)
     private Transaction movement_type;
 
-    private double amount;
+    private Double amount;
 
-    private double balance;
+    private Double balance;
 
     private Long account_id;
-
-//    @ManyToOne
-//    private Account account;
 
 }

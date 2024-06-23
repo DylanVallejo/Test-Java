@@ -3,7 +3,6 @@ package com.tcs.operations.dto;
 import com.tcs.operations.enums.Gender;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import lombok.Data;
 
 
