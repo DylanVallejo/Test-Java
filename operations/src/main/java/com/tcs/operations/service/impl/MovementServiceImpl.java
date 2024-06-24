@@ -11,6 +11,7 @@ import com.tcs.operations.exceptions.BalanceInsuficientException;
 import com.tcs.operations.exceptions.ClientNotFoundException;
 import com.tcs.operations.exceptions.IncorrectValueException;
 import com.tcs.operations.mappers.Mapper;
+import com.tcs.operations.mappers.TestMapper;
 import com.tcs.operations.repository.AccountRepository;
 import com.tcs.operations.repository.ClientRepository;
 import com.tcs.operations.repository.MovementRepository;
@@ -30,7 +31,7 @@ public class MovementServiceImpl  implements MovementService {
     private final AccountRepository accountRepository;
     private final Mapper mapper;
     private final ClientRepository clientRepository;
-
+    private final TestMapper testMapper;
 
     @Override
     public MovementDto transaction(MovementDto movementDto, Long accountId) throws BalanceInsuficientException, ClientNotFoundException, IncorrectValueException {
@@ -46,27 +47,20 @@ public class MovementServiceImpl  implements MovementService {
 
     @Override
     public List<MovementDto> getAllMovements(ClientDto clientDto) throws ClientNotFoundException {
-        Client clientDb = clientRepository.findById(clientDto.getClient_id()).orElse(null);
+        Client clientDb = clientRepository.findById(clientDto.getClient_id()).orElseThrow( () -> new  ClientNotFoundException("Client whit id: " + clientDto.getClient_id() +" does not exist."));
 
-        if (clientDb != null){
-            if (clientDb.getPassword().equals(clientDto.getPassword())){
-                List<Account> accounts = accountRepository.findAccounts(clientDto.getClient_id());
+        if ( !clientDb.getPassword().equals(clientDto.getPassword()) ) throw new ClientNotFoundException("Password incorrect.");
+        List<Account> accounts = accountRepository.findAccounts(clientDto.getClient_id());
 
-                List<Long> accountIds = accounts.stream()
-                        .map(Account::getAccount_id)
-                        .collect(Collectors.toList());
+        List<Long> accountIds = accounts.stream()
+                .map(Account::getAccount_id)
+                .collect(Collectors.toList());
 
-                List<Movement> movements = movementRepository.findAllByAccountId(accountIds);
+        List<Movement> movements = movementRepository.findAllByAccountId(accountIds);
 
-                return movements.stream()
-                        .map(mapper::movementToMovementDto)
-                        .collect(Collectors.toList());
-            } else {
-                throw new ClientNotFoundException("Password incorrect.");
-            }
-        } else {
-            throw new ClientNotFoundException("Client whit id: " + clientDto.getClient_id() +" does not exist.");
-        }
+        return movements.stream()
+                .map(testMapper::mapearMovementToMovementDto)
+                .collect(Collectors.toList());
     }
 
     public Account findAccount(Long accountId){
@@ -76,7 +70,7 @@ public class MovementServiceImpl  implements MovementService {
 
     public MovementDto credit(MovementDto creditMovement, Long accountId) throws IncorrectValueException {
         Account accountDB = findAccount(accountId);
-        if( creditMovement.getAmount() < 0){
+        if( creditMovement.getAmount() <= 0){
             throw new IncorrectValueException("Credits only allows positive numbers.");
         } else {
             accountDB.setInitial_balance( accountDB.getInitial_balance()   + creditMovement.getAmount());
@@ -91,7 +85,7 @@ public class MovementServiceImpl  implements MovementService {
         Account accountDB = findAccount(accountId);
         if (accountDB.getInitial_balance() < creditMovement.getAmount()){
             throw  new BalanceInsuficientException("Current balanace is insuficient for the transaction" + accountDB.getInitial_balance());
-        } else if( creditMovement.getAmount() > 0){
+        } else if( creditMovement.getAmount() >= 0){
             throw new IncorrectValueException("Debits only allows negative numbers.");
         } else {
             accountDB.setInitial_balance( accountDB.getInitial_balance() -  Math.abs(creditMovement.getAmount()));
@@ -101,6 +95,4 @@ public class MovementServiceImpl  implements MovementService {
             return mapper.movementToMovementDto(movementDb);
         }
     }
-
-
 }
